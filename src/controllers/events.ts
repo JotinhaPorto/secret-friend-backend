@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import * as events from '../services/events'
-import { z } from "zod";
+import { boolean, z } from "zod";
 
 export const getAll: RequestHandler = async (req, res) => {
     const items = await events.getAll()
@@ -43,4 +43,28 @@ export const addEvent: RequestHandler = async (req, res) => {
 
     res.json({ event: newEvent })
 
+}
+
+export const editEvent: RequestHandler = async (req, res) => {
+    const { id } = req.params
+
+    const editEventSchema = z.object({
+        status: z.boolean().optional(),
+        title: z.string().optional(),
+        Description: z.string().optional(),
+        grouped: z.boolean().optional()
+    })
+
+    const body = editEventSchema.safeParse(req.body)
+
+    if (!body.success) {
+        return res.json({ error: "Dados inválidos" })
+    }
+
+    const updatedEvent = await events.update(parseInt(id), body.data)
+
+    if (!updatedEvent) {
+        return res.json({ error: "Ocorreu um erro", status: 403 })
+    }
+    res.json({ event: updatedEvent })
 }
