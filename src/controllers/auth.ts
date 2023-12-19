@@ -14,7 +14,7 @@ export const login: RequestHandler = (req, res) => {
         return res.json({ error: "Dados inválidos" })
     }
 
-   //Validar senha 
+    //Validar senha 
     if (!auth.validatePassword(body.data.password)) {
         return res.json({ error: "Senha incorreta", status: 403 })
     }
@@ -23,3 +23,19 @@ export const login: RequestHandler = (req, res) => {
     res.json({ token: auth.createToken() })
 
 }
+
+export const validate: RequestHandler = (req, res, next) => {
+
+    if (!req.headers.authorization) {
+        return res.json({ error: "Precisa enviar um token", status: 403 })
+    }
+
+    const token = req.headers.authorization.split(' ')[1]
+    if (!auth.validateToken(token)) {
+        return res.json({ error: "Token inválido", status: 403 })
+    }
+
+    next()
+
+}
+
