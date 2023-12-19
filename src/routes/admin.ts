@@ -10,5 +10,6 @@ router.use(auth.validate)
 
 router.get("/events", events.getAll)
 router.get("/events/:id", events.getEvent)
+router.post("/events", events.addEvent)
 
 export default router;
