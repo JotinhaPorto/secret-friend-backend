@@ -10,3 +10,12 @@ export const getAll = async () => {
         return false
     }
 }
+
+export const getOne = async (id: number) => {
+    try {
+        return await prisma.event.findUnique({ where: { id } })
+    }
+    catch (error) {
+        return false
+    }
+}
