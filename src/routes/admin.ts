@@ -12,5 +12,6 @@ router.get("/events", events.getAll)
 router.get("/events/:id", events.getEvent)
 router.post("/events", events.addEvent)
 router.patch("/events/:id", events.editEvent)
+router.delete("/events/:id", events.deleteEvent)
 
 export default router;

@@ -68,3 +68,15 @@ export const editEvent: RequestHandler = async (req, res) => {
     }
     res.json({ event: updatedEvent })
 }
+
+export const deleteEvent: RequestHandler = async (req, res) => {
+    const { id } = req.params
+
+    const deletedEvent = await events.remove(parseInt(id))
+
+    if (!deletedEvent) {
+        return res.json({ error: "Ocorreu um erro", status: 403 })
+    }
+
+    res.json({ event: deletedEvent })
+}
