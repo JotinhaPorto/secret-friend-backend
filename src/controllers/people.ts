@@ -88,3 +88,19 @@ export const editPerson: RequestHandler = async (req, res) => {
     }
     res.json({ person: updatedPerson })
 }
+
+export const removePerson: RequestHandler = async (req, res) => {
+    const { id_event, id_group, id } = req.params
+
+
+    const deletedPerson = await people.remove({
+        id_event: parseInt(id_event),
+        id_group: parseInt(id_group),
+        id: parseInt(id)
+    })
+
+    if (!deletedPerson) {
+        return res.json({ error: "Ocorreu um erro", status: 403 })
+    }
+    res.json({ person: deletedPerson })
+}

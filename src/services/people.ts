@@ -59,3 +59,14 @@ export const update = async (filters: UpdateFilters, data: PeopleUpdateData) => 
         return false
     }
 }
+
+type RemoveFilters = { id_event: number, id_group: number, id: number }
+
+export const remove = async (filters: RemoveFilters) => {
+    try {
+        return await prisma.eventPeople.delete({ where: filters })
+    }
+    catch (error) {
+        return false
+    }
+}
