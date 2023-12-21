@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient } from "@prisma/client"
+import * as groups from './groups'
 
 const prisma = new PrismaClient()
 
@@ -17,6 +18,28 @@ type GetOneFilter = { id_event: number, id_group: number, id: number }
 export const getOne = async (filters: GetOneFilter) => {
     try {
         return await prisma.eventPeople.findUnique({ where: filters })
+    }
+    catch (error) {
+        return false
+    }
+}
+
+type PeopleCreateData = Prisma.Args<typeof prisma.eventPeople, 'create'>['data']
+export const add = async (data: PeopleCreateData) => {
+    try {
+        if (!data.id_group) {
+            return false
+        }
+        const group = await groups.getOne({
+            id: data.id_group,
+            id_event: data.id_event
+        })
+
+        if (!group) {
+            return false
+        }
+
+        return await prisma.eventPeople.create({ data })
     }
     catch (error) {
         return false
