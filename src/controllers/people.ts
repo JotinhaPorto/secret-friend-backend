@@ -61,3 +61,30 @@ export const addPerson: RequestHandler = async (req, res) => {
     res.json({ person: newPerson })
 
 }
+
+export const editPerson: RequestHandler = async (req, res) => {
+    const { id_event, id_group, id } = req.params
+
+    const editPersonSchema = z.object({
+        name: z.string().optional(),
+        cpf: z.string().transform(val => val.replace(/\.|-/gm, '')).optional(),
+        matched: z.string().optional()
+    })
+
+    const body = editPersonSchema.safeParse(req.body)
+
+    if (!body.success) {
+        return res.json({ error: "Dados inválidos" })
+    }
+
+    const updatedPerson = await people.update({
+        id_event: parseInt(id_event),
+        id_group: parseInt(id_group),
+        id: parseInt(id)
+    }, body.data)
+
+    if (!updatedPerson) {
+        return res.json({ error: "Ocorreu um erro", status: 403 })
+    }
+    res.json({ person: updatedPerson })
+}

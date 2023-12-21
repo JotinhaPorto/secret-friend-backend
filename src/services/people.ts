@@ -4,6 +4,7 @@ import * as groups from './groups'
 const prisma = new PrismaClient()
 
 type GetAllFilters = { id_event: number, id_group: number }
+
 export const getAll = async (filters: GetAllFilters) => {
     try {
         return await prisma.eventPeople.findMany({ where: filters })
@@ -25,6 +26,7 @@ export const getOne = async (filters: GetOneFilter) => {
 }
 
 type PeopleCreateData = Prisma.Args<typeof prisma.eventPeople, 'create'>['data']
+
 export const add = async (data: PeopleCreateData) => {
     try {
         if (!data.id_group) {
@@ -40,6 +42,18 @@ export const add = async (data: PeopleCreateData) => {
         }
 
         return await prisma.eventPeople.create({ data })
+    }
+    catch (error) {
+        return false
+    }
+}
+
+type UpdateFilters = { id_event: number, id_group: number, id: number }
+type PeopleUpdateData = Prisma.Args<typeof prisma.eventPeople, 'update'>['data']
+
+export const update = async (filters: UpdateFilters, data: PeopleUpdateData) => {
+    try {
+        return await prisma.eventPeople.update({ where: filters, data })
     }
     catch (error) {
         return false
