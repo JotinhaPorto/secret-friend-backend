@@ -53,3 +53,7 @@ export const remove = async (id: number) => {
         return false
     }
 }
+
+export const doMatches = async (id: number) => {
+    return true
+}

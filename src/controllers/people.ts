@@ -83,10 +83,15 @@ export const editPerson: RequestHandler = async (req, res) => {
         id: parseInt(id)
     }, body.data)
 
-    if (!updatedPerson) {
-        return res.json({ error: "Ocorreu um erro", status: 403 })
+    if (updatedPerson) {
+        const personItem = await people.getOne({
+            id: parseInt(id),
+            id_event: parseInt(id_event),
+            id_group: parseInt(id_group)
+        })
+        return res.json({ person: personItem})
     }
-    res.json({ person: updatedPerson })
+    res.json({ error: "Ocorreu um erro", status: 403 })
 }
 
 export const removePerson: RequestHandler = async (req, res) => {

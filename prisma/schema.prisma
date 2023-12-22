@@ -16,7 +16,7 @@ model Event {
   title       String
   Description String
   grouped     Boolean       @default(false)
-  EventGroup  EventGroup[] 
+  EventGroup  EventGroup[]
   EventPeople EventPeople[]
 }
 

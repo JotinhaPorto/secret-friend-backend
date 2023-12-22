@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import * as events from '../services/events'
+import * as people from '../services/people'
 import { boolean, z } from "zod";
 
 export const getAll: RequestHandler = async (req, res) => {
@@ -63,10 +64,19 @@ export const editEvent: RequestHandler = async (req, res) => {
 
     const updatedEvent = await events.update(parseInt(id), body.data)
 
-    if (!updatedEvent) {
-        return res.json({ error: "Ocorreu um erro", status: 403 })
+    if (updatedEvent) {
+        if (updatedEvent.status) {
+            const result = await events.doMatches(parseInt(id))
+            if (!result) {
+                return res.json({ error: "Grupos impossiveis de sortear" })
+            }
+        }
+        else {
+            await people.update({ id_event: parseInt(id) }, { matched: '' })
+        }
+        return res.json({ event: updatedEvent })
     }
-    res.json({ event: updatedEvent })
+    res.json({ error: "Ocorreu um erro", status: 403 })
 }
 
 export const deleteEvent: RequestHandler = async (req, res) => {
