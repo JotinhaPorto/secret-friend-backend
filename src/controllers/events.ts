@@ -57,9 +57,8 @@ export const editEvent: RequestHandler = async (req, res) => {
     })
 
     const body = editEventSchema.safeParse(req.body)
-
     if (!body.success) {
-        return res.json({ error: "Dados inválidos" })
+        return res.json({ error: "Dados inválidos", data: req.body })
     }
 
     const updatedEvent = await events.update(parseInt(id), body.data)
