@@ -151,5 +151,5 @@ export const searchPeople: RequestHandler = async (req, res) => {
         }
     }
 
-    res.json({ error: "Ocorreu um erro"})
+    res.json({ error: "Cpf não encontrado" })
 }
